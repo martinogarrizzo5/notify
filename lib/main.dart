@@ -28,10 +28,39 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<void> setupNotificationListener() async {
+    // for foreground notifications
+    FirebaseMessaging.onMessage.listen(_handleMessage);
+
+    // for terminated app notifications
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // for background notifications
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    print(message.notification?.body);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupNotificationListener();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
