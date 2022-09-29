@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:notify/screens/home_screen.dart';
+import 'package:notify/screens/notification_details_screen.dart';
+import "dart:math";
 import 'package:notify/utils/notification_helpers.dart';
+import 'package:notify/utils/router.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+import "./models/notification.dart" as notif_model;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +40,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> notifications = [];
+  List<notif_model.Notification> notifications = [];
+  notif_model.Notification? selectedNotification;
+  void onSelectedNotificationChange(notification) {
+    setState(() => selectedNotification = notification);
+  }
 
   Future<void> setupNotificationListener() async {
     // for foreground notifications
@@ -56,10 +64,15 @@ class _MyAppState extends State<MyApp> {
   void _handleMessage(RemoteMessage message) {
     if (message.notification == null) return;
 
-    String? notification = message.notification!.body;
+    final notification = message.notification;
     if (notification != null) {
+      final newNotification = notif_model.Notification(
+        id: "${Random().nextInt(10000)}-${Random().nextInt(10000)}",
+        title: notification.title!,
+        body: notification.body!,
+      );
       setState(
-        () => notifications.insert(0, notification),
+        () => notifications.insert(0, newNotification),
       );
     }
   }
@@ -73,9 +86,37 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: Navigator(
+        pages: [
+          MaterialPage(
+            key: ValueKey("home"),
+            child: HomeScreen(
+              notifications: notifications,
+              onSelectedNotificationChange: onSelectedNotificationChange,
+            ),
+          ),
+          if (selectedNotification != null)
+            MaterialPage(
+              key: ValueKey("notification-details"),
+              child: NotificationDetailsScreen(
+                notification: selectedNotification!,
+              ),
+            ),
+        ],
+        onPopPage: (route, result) {
+          if (!route.didPop(result)) return false;
+          final page = route.settings as MaterialPage;
+
+          if (selectedNotification != null &&
+              page.key == ValueKey("notification-details")) {
+            setState(() => selectedNotification = null);
+          }
+
+          return true;
+        },
+      ),
       debugShowCheckedModeBanner: false,
       title: 'Notify',
-      home: HomeScreen(notifications),
     );
   }
 }

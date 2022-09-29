@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import "../models/notification.dart" as notif_model;
 
 class HomeScreen extends StatefulWidget {
-  final List<String> notifications;
+  final List<notif_model.Notification> notifications;
+  final ValueChanged onSelectedNotificationChange;
 
-  const HomeScreen(this.notifications, {Key? key}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+    required this.notifications,
+    required this.onSelectedNotificationChange,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,15 +20,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Notify'),
       ),
       body: ListView(
         children: widget.notifications
             .map(
-              (el) => Card(
+              (notification) => Card(
                 child: ListTile(
-                  onTap: () {},
-                  title: Text(el),
+                  onTap: () =>
+                      widget.onSelectedNotificationChange(notification),
+                  title: Text(notification.title),
                 ),
               ),
             )
