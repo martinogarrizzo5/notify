@@ -36,6 +36,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  List<String> notifications = [];
+
   Future<void> setupNotificationListener() async {
     // for foreground notifications
     FirebaseMessaging.onMessage.listen(_handleMessage);
@@ -52,7 +54,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _handleMessage(RemoteMessage message) {
-    print(message.notification?.body);
+    if (message.notification == null) return;
+
+    String? notification = message.notification!.body;
+    if (notification != null) {
+      setState(
+        () => notifications.insert(0, notification),
+      );
+    }
   }
 
   @override
@@ -66,7 +75,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Notify',
-      home: const HomeScreen(),
+      home: HomeScreen(notifications),
     );
   }
 }

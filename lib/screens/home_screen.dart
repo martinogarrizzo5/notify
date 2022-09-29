@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final List<String> notifications;
+
+  const HomeScreen(this.notifications, {Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,8 +16,17 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: const Center(
-        child: Text('Home Screen'),
+      body: ListView(
+        children: widget.notifications
+            .map(
+              (el) => Card(
+                child: ListTile(
+                  onTap: () {},
+                  title: Text(el),
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
