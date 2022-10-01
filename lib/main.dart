@@ -59,6 +59,7 @@ class _MyAppState extends State<MyApp> {
           routerDelegate: routerDelegate,
           routeInformationParser: BeamerParser(),
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(primarySwatch: Colors.pink),
           title: 'Notify',
         ),
       ),
