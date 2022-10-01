@@ -11,7 +11,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     final newNotification = Notification(id: id, body: body, title: title);
     emit(
       NotificationsState(
-        notifications: [...state.notifications, newNotification],
+        notifications: [newNotification, ...state.notifications],
       ),
     );
   }

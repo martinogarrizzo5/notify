@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notify/cubit/notifications_cubit.dart';
 import "../models/notification.dart" as notif_model;
 
 class HomeScreen extends StatefulWidget {
   final path = "/";
-  final List<notif_model.Notification> notifications;
-  final ValueChanged onSelectedNotificationChange;
 
   const HomeScreen({
     Key? key,
-    required this.notifications,
-    required this.onSelectedNotificationChange,
   }) : super(key: key);
 
   @override
@@ -23,18 +21,21 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Notify'),
       ),
-      body: ListView(
-        children: widget.notifications
-            .map(
-              (notification) => Card(
-                child: ListTile(
-                  onTap: () =>
-                      widget.onSelectedNotificationChange(notification),
-                  title: Text(notification.title),
-                ),
-              ),
-            )
-            .toList(),
+      body: BlocBuilder<NotificationsCubit, NotificationsState>(
+        builder: (context, state) {
+          return ListView(
+            children: state.notifications
+                .map(
+                  (notification) => Card(
+                    child: ListTile(
+                      onTap: () {},
+                      title: Text(notification.title),
+                    ),
+                  ),
+                )
+                .toList(),
+          );
+        },
       ),
     );
   }
