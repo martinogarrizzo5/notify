@@ -15,4 +15,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       ),
     );
   }
+
+  Notification getNotificationById(String id) {
+    return state.notifications.firstWhere((element) => element.id == id);
+  }
 }

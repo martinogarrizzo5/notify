@@ -1,10 +1,11 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notify/cubit/notifications_cubit.dart';
-import "../models/notification.dart" as notif_model;
 
 class HomeScreen extends StatefulWidget {
-  final path = "/";
+  static const path = "/";
+  static const beamPage = BeamPage(key: ValueKey('home'), child: HomeScreen());
 
   const HomeScreen({
     Key? key,
@@ -28,7 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 .map(
                   (notification) => Card(
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () => Beamer.of(context).beamToNamed(
+                        "/notifications/${notification.id}",
+                      ),
                       title: Text(notification.title),
                     ),
                   ),

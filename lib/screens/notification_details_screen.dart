@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import "../models/notification.dart" as notif_model;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notify/cubit/notifications_cubit.dart';
 
 class NotificationDetailsScreen extends StatelessWidget {
-  final notif_model.Notification notification;
+  final String notificationId;
 
-  const NotificationDetailsScreen({Key? key, required this.notification})
+  const NotificationDetailsScreen({Key? key, required this.notificationId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final notification =
+        BlocProvider.of<NotificationsCubit>(context, listen: true)
+            .getNotificationById(notificationId);
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(

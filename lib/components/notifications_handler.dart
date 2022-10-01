@@ -13,6 +13,12 @@ class NotificationsHandler extends StatefulWidget {
 }
 
 class _NotificationsHandlerState extends State<NotificationsHandler> {
+  @override
+  void initState() {
+    super.initState();
+    setupNotificationListener();
+  }
+
   Future<void> setupNotificationListener() async {
     // for foreground notifications
     FirebaseMessaging.onMessage.listen(_handleMessage);
@@ -39,12 +45,6 @@ class _NotificationsHandlerState extends State<NotificationsHandler> {
         notification.body!,
       );
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setupNotificationListener();
   }
 
   @override

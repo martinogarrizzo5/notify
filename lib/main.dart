@@ -2,15 +2,13 @@ import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notify/components/notifications_handler.dart';
-import 'package:notify/cubit/notifications_cubit.dart';
-import 'package:notify/screens/home_screen.dart';
-import 'package:notify/screens/notification_details_screen.dart';
-import "dart:math";
-import 'package:notify/utils/notification_helpers.dart';
+import './components/notifications_handler.dart';
+import './cubit/notifications_cubit.dart';
+import './routes/beam_locations.dart';
+import './screens/home_screen.dart';
+import './utils/notification_helpers.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-import "./models/notification.dart" as notif_model;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,16 +41,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final routerDelegate = BeamerDelegate(
+    locationBuilder: BeamerLocationBuilder(
+      beamLocations: [
+        HomeLocation(),
+        NotificationDetailsLocation(),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NotificationsCubit(),
-      child: MaterialApp(
-        home: NotificationsHandler(
-          child: HomeScreen(),
+      child: NotificationsHandler(
+        child: MaterialApp.router(
+          routerDelegate: routerDelegate,
+          routeInformationParser: BeamerParser(),
+          debugShowCheckedModeBanner: false,
+          title: 'Notify',
         ),
-        debugShowCheckedModeBanner: false,
-        title: 'Notify',
       ),
     );
   }
