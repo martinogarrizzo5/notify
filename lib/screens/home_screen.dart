@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "../models/notification.dart" as notif_model;
 
 class HomeScreen extends StatefulWidget {
+  final path = "/";
   final List<notif_model.Notification> notifications;
   final ValueChanged onSelectedNotificationChange;
 

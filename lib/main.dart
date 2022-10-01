@@ -1,10 +1,12 @@
+import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notify/cubit/notifications_cubit.dart';
 import 'package:notify/screens/home_screen.dart';
 import 'package:notify/screens/notification_details_screen.dart';
 import "dart:math";
 import 'package:notify/utils/notification_helpers.dart';
-import 'package:notify/utils/router.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import "./models/notification.dart" as notif_model;
@@ -85,38 +87,41 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Navigator(
-        pages: [
-          MaterialPage(
-            key: ValueKey("home"),
-            child: HomeScreen(
-              notifications: notifications,
-              onSelectedNotificationChange: onSelectedNotificationChange,
-            ),
-          ),
-          if (selectedNotification != null)
+    return BlocProvider(
+      create: (context) => NotificationsCubit(),
+      child: MaterialApp(
+        home: Navigator(
+          pages: [
             MaterialPage(
-              key: ValueKey("notification-details"),
-              child: NotificationDetailsScreen(
-                notification: selectedNotification!,
+              key: ValueKey("home"),
+              child: HomeScreen(
+                notifications: notifications,
+                onSelectedNotificationChange: onSelectedNotificationChange,
               ),
             ),
-        ],
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) return false;
-          final page = route.settings as MaterialPage;
+            if (selectedNotification != null)
+              MaterialPage(
+                key: ValueKey("notification-details"),
+                child: NotificationDetailsScreen(
+                  notification: selectedNotification!,
+                ),
+              ),
+          ],
+          onPopPage: (route, result) {
+            if (!route.didPop(result)) return false;
+            final page = route.settings as MaterialPage;
 
-          if (selectedNotification != null &&
-              page.key == ValueKey("notification-details")) {
-            setState(() => selectedNotification = null);
-          }
+            if (selectedNotification != null &&
+                page.key == ValueKey("notification-details")) {
+              setState(() => selectedNotification = null);
+            }
 
-          return true;
-        },
+            return true;
+          },
+        ),
+        debugShowCheckedModeBanner: false,
+        title: 'Notify',
       ),
-      debugShowCheckedModeBanner: false,
-      title: 'Notify',
     );
   }
 }
