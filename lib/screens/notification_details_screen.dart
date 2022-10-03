@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notify/cubit/notifications_cubit.dart';
+import '../cubit/notifications_cubit.dart';
 
 class NotificationDetailsScreen extends StatelessWidget {
   final String notificationId;
 
   const NotificationDetailsScreen({Key? key, required this.notificationId})
       : super(key: key);
+  static const path = "/notifications/:id";
 
   @override
   Widget build(BuildContext context) {
     final notification =
         BlocProvider.of<NotificationsCubit>(context, listen: true)
-            .getNotificationById(notificationId);
+            .getNotificationById(notificationId)!;
 
     return Scaffold(
       appBar: AppBar(),

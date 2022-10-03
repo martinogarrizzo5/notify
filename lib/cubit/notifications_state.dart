@@ -1,7 +1,21 @@
 part of 'notifications_cubit.dart';
 
-class NotificationsState {
-  List<Notification> notifications;
+abstract class NotificationsState {
+  List<Notification>? notifications;
+}
 
-  NotificationsState({required this.notifications});
+class NotificationsListState implements NotificationsState {
+  @override
+  List<Notification>? notifications;
+
+  NotificationsListState({required this.notifications});
+}
+
+class NotificationLoadingListState implements NotificationsState {
+  @override
+  List<Notification>? notifications;
+
+  NotificationLoadingListState() {
+    notifications = null;
+  }
 }

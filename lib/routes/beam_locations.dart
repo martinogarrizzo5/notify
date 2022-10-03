@@ -1,7 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
-import 'package:notify/screens/home_screen.dart';
-import 'package:notify/screens/notification_details_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/notification_details_screen.dart';
 
 class HomeLocation extends BeamLocation {
   @override
@@ -40,5 +40,5 @@ class NotificationDetailsLocation extends BeamLocation {
   }
 
   @override
-  List<Pattern> get pathPatterns => ["/notifications/:id"];
+  List<Pattern> get pathPatterns => [NotificationDetailsScreen.path];
 }

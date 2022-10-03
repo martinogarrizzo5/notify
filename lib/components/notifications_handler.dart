@@ -35,6 +35,7 @@ class _NotificationsHandlerState extends State<NotificationsHandler> {
   }
 
   void _handleMessage(RemoteMessage message) {
+    print("Received Notification");
     if (message.notification == null) return;
 
     final notification = message.notification;

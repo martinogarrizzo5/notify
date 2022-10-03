@@ -31,12 +31,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Expanded(
                   child: ListView(
                     padding: const EdgeInsets.all(8),
-                    children: state.notifications!
-                        .map(
+                    children: [
+                      if (state.notifications == null)
+                        const Center(child: CircularProgressIndicator()),
+                      if (state.notifications != null)
+                        ...state.notifications!.map(
                           (notification) => Container(
                             margin: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.yellow[50],
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.15),
@@ -46,19 +48,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            child: ListTile(
-                              onTap: () => Beamer.of(context).beamToNamed(
-                                "/notifications/${notification.id}",
+                            child: Material(
+                              color: Colors.yellow[50],
+                              child: ListTile(
+                                onTap: () => Beamer.of(context).beamToNamed(
+                                  "/notifications/${notification.id}",
+                                ),
+                                leading: Icon(
+                                  Icons.notifications,
+                                  color: Color(0xFFFF006F),
+                                ),
+                                title: Text(notification.title),
                               ),
-                              leading: Icon(
-                                Icons.notifications,
-                                color: Color(0xFFFF006F),
-                              ),
-                              title: Text(notification.title),
                             ),
                           ),
-                        )
-                        .toList(),
+                        ),
+                    ],
                   ),
                 );
               },
