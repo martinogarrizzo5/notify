@@ -32,9 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView(
                     padding: const EdgeInsets.all(8),
                     children: [
-                      if (state.notifications == null)
+                      if (state is NotificationLoadingListState)
                         const Center(child: CircularProgressIndicator()),
-                      if (state.notifications != null)
+                      if (state is NotificationsListState)
                         ...state.notifications!.map(
                           (notification) => Container(
                             margin: const EdgeInsets.all(8),
