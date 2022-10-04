@@ -1,21 +1,25 @@
 part of 'notifications_cubit.dart';
 
-abstract class NotificationsState {
-  List<Notification>? notifications;
-}
+abstract class NotificationsState extends Equatable {}
 
 class NotificationsListState implements NotificationsState {
-  @override
   List<Notification>? notifications;
 
   NotificationsListState({required this.notifications});
+
+  @override
+  List<Object?> get props => [notifications];
+
+  @override
+  bool? get stringify => false;
 }
 
 class NotificationLoadingListState implements NotificationsState {
-  @override
-  List<Notification>? notifications;
+  NotificationLoadingListState();
 
-  NotificationLoadingListState() {
-    notifications = null;
-  }
+  @override
+  List<Object?> get props => [];
+
+  @override
+  bool? get stringify => false;
 }

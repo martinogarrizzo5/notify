@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:notify/models/notification.dart';
 import 'package:notify/utils/db_heper.dart';
 
@@ -25,22 +26,29 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   void addNotification(String id, String title, String body) async {
-    if (state.notifications != null) {
+    if (state is NotificationsListState &&
+        (state as NotificationsListState).notifications != null) {
       final newNotification = Notification(id: id, body: body, title: title);
       await DBHelper.insert(
           "notifications", {"id": id, "body": body, "title": title});
 
       emit(
         NotificationsListState(
-          notifications: [newNotification, ...state.notifications!],
+          notifications: [
+            newNotification,
+            ...(state as NotificationsListState).notifications!
+          ],
         ),
       );
     }
   }
 
   Notification? getNotificationById(String id) {
-    if (state.notifications != null) {
-      return state.notifications!.firstWhere((element) => element.id == id);
+    if (state is NotificationsListState &&
+        (state as NotificationsListState).notifications != null) {
+      return (state as NotificationsListState)
+          .notifications!
+          .firstWhere((element) => element.id == id);
     }
 
     return null;
