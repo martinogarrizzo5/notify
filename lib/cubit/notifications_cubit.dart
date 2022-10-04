@@ -12,45 +12,53 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   Future<void> loadNotifications() async {
     final loadedData = await DBHelper.getData("notifications");
-    List<Notification> notifications = loadedData
-        .map(
-          (item) => Notification(
-            id: item["id"] as String,
-            title: item["title"] as String,
-            body: item["body"] as String,
-          ),
-        )
-        .toList();
+    List<Notification> notifications =
+        loadedData.map((item) => Notification.fromMap(item)).toList();
 
     emit(NotificationsListState(notifications: notifications));
   }
 
   void addNotification(String id, String title, String body) async {
-    if (state is NotificationsListState &&
-        (state as NotificationsListState).notifications != null) {
+    if (state is NotificationsListState) {
+      final listState = state as NotificationsListState;
       final newNotification = Notification(id: id, body: body, title: title);
       await DBHelper.insert(
           "notifications", {"id": id, "body": body, "title": title});
 
       emit(
         NotificationsListState(
-          notifications: [
-            newNotification,
-            ...(state as NotificationsListState).notifications!
-          ],
+          notifications: [newNotification, ...listState.notifications],
         ),
       );
     }
   }
 
   Notification? getNotificationById(String id) {
-    if (state is NotificationsListState &&
-        (state as NotificationsListState).notifications != null) {
-      return (state as NotificationsListState)
-          .notifications!
-          .firstWhere((element) => element.id == id);
+    if (state is NotificationsListState) {
+      final listState = state as NotificationsListState;
+
+      int index =
+          listState.notifications.indexWhere((element) => element.id == id);
+      if (index != -1) {
+        return listState.notifications[index];
+      }
     }
 
     return null;
+  }
+
+  Future<void> deleteNotificationById(String id) async {
+    if (state is NotificationsListState) {
+      final listState = state as NotificationsListState;
+
+      await DBHelper.deleteById("notifications", id);
+      emit(
+        NotificationsListState(
+          notifications: listState.notifications
+              .where((element) => element.id != id)
+              .toList(),
+        ),
+      );
+    }
   }
 }

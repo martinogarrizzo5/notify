@@ -28,4 +28,9 @@ class DBHelper {
 
     return data;
   }
+
+  static Future<void> deleteById(String table, String id) async {
+    final db = await DBHelper.notificationsDatabase();
+    db.delete(table, where: "id = ?", whereArgs: [id]);
+  }
 }

@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state is NotificationLoadingListState)
                         const Center(child: CircularProgressIndicator()),
                       if (state is NotificationsListState)
-                        ...state.notifications!.map(
+                        ...state.notifications.map(
                           (notification) => Container(
                             margin: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
