@@ -24,3 +24,13 @@ class LoadedNotificationWithWordsCount extends LoadedNotification {
   const LoadedNotificationWithWordsCount(
       {required super.notification, required this.words});
 }
+
+class NotificationDeleted extends NotificationState {}
+
+class NotificationNotFound extends NotificationState {}
+
+class NotificationError extends NotificationState {
+  final Object exception;
+
+  const NotificationError({required this.exception});
+}

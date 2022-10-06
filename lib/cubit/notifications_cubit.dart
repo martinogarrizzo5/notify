@@ -51,7 +51,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     if (state is NotificationsListState) {
       final listState = state as NotificationsListState;
 
-      await DBHelper.deleteById("notifications", id);
+      int deletedRows = await DBHelper.deleteById("notifications", id);
+      if (deletedRows != 1) {
+        throw Exception("Error deleting notification");
+      }
       emit(
         NotificationsListState(
           notifications: listState.notifications

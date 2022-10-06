@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './components/notifications_handler.dart';
 import './cubit/notifications_cubit.dart';
 import './routes/beam_locations.dart';
-import './screens/home_screen.dart';
 import './utils/notification_helpers.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +33,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
+  static final NotificationsCubit notificationsCubit = NotificationsCubit();
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NotificationsCubit(),
+      create: (context) => MyApp.notificationsCubit,
       child: NotificationsHandler(
         child: MaterialApp.router(
           routerDelegate: routerDelegate,

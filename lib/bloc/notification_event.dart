@@ -29,3 +29,5 @@ class NotificationDeleteEvent extends NotificationEvent {
   @override
   List<Object> get props => [id];
 }
+
+class NotificationNotFoundEvent extends NotificationEvent {}
