@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notify/cubit/notifications_cubit.dart';
+import 'package:notify/utils/external_map_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   static const path = "/";
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset(
               "assets/notify-logo.png",
@@ -67,6 +69,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  ExternalMapUtils.launchMapsDirectionUrl(
+                    45.6296728,
+                    12.1763104,
+                  );
+                },
+                child: const Text("Map with url_launcher"),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  ExternalMapUtils.showMapDirections(45.65496954, 12.20451457);
+                },
+                child: const Text("Go To External Map"),
+              ),
             ),
           ],
         ),
