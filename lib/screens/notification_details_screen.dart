@@ -1,10 +1,11 @@
+import 'dart:math';
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notify/bloc/notification_bloc.dart';
 import 'package:notify/main.dart';
 import 'package:notify/routes/beam_locations.dart';
-import '../cubit/notifications_cubit.dart';
 
 class NotificationDetailsScreen extends StatelessWidget {
   final String notificationId;
@@ -16,6 +17,7 @@ class NotificationDetailsScreen extends StatelessWidget {
         MyApp.notificationsCubit.getNotificationById(notificationId);
     if (notification != null) {
       notificationBloc.add(NotificationChangeEvent(notification: notification));
+      notificationBloc.listenToNotificationChanges(notificationId);
     } else {
       notificationBloc.add(NotificationNotFoundEvent());
     }
@@ -75,14 +77,14 @@ class NotificationDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      state.notification.title,
+                      state.notification.title!,
                       style: const TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      state.notification.body,
+                      state.notification.body!,
                       style: const TextStyle(fontSize: 15),
                     ),
                     const SizedBox(height: 16),
@@ -99,7 +101,16 @@ class NotificationDetailsScreen extends StatelessWidget {
                     if (state is LoadedNotificationWithWordsCount)
                       Text("Words: ${state.words}")
                     else
-                      const Text("No words counted yet!")
+                      const Text("No words counted yet!"),
+                    ElevatedButton(
+                      onPressed: () {
+                        db.updateNotificationById(
+                          id: notificationId,
+                          title: Random().nextInt(10000).toString(),
+                        );
+                      },
+                      child: Text("Update notification"),
+                    )
                   ],
                 ),
               );

@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notify/database/database.dart';
 import './components/notifications_handler.dart';
 import './cubit/notifications_cubit.dart';
 import './routes/beam_locations.dart';
@@ -9,8 +10,11 @@ import './utils/notification_helpers.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
+AppDb db = AppDb();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  db = AppDb();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

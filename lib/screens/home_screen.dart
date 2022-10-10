@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icons.notifications,
                                   color: Color(0xFFFF006F),
                                 ),
-                                title: Text(notification.title),
+                                title: Text(notification.title!),
                               ),
                             ),
                           ),

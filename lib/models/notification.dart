@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
-class Notification {
+class Notification extends Equatable {
   final String id;
   final String title;
   final String body;
@@ -19,4 +20,7 @@ class Notification {
       body: map['body'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [id, title, body];
 }
